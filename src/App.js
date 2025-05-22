@@ -1,24 +1,45 @@
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import './intercepter';
+import PublicRoutes from './Pages/Routes/PublicRoutes';
+import ProtectedRoutes from './Pages/Routes/ProtectedRoutes';
+import RoleBasedRoutes from './Pages/Routes/RoleBasedRoutes'
+import Dashboard from './Pages/Dashboard/Dashboard';
+import Unauthorized from './Pages/PublicPages/Unauthorized';
+import Login from './Pages/Auth/Login'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // <BrowserRouter basename='/decorato'>
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        {/* <Route path="/" element={<PublicRoutes />}> */}
+          <Route element={<Login />} path="/" />
+          <Route element={<Login />} path="/login" />
+          {/* <Route element={<ForgotPassword />} path="/forgot_password" /> */}
+        {/* </Route> */}
+
+        {/* Protected Routes for Authenticated Users */}
+        <Route path="/" element={<ProtectedRoutes />}>
+          {/* SuperAdmin Only Routes */}
+          <Route element={<RoleBasedRoutes allowedRoles={["SuperAdmin", "Admin"]} />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+          {/* Client Only Routes */}
+          <Route element={<RoleBasedRoutes allowedRoles={["SuperAdmin", "Admin", "Client"]} />}>
+              {/* <Route path="/client_quote_requests" element={<ClientQuoteRequests />} />
+              <Route path="/client_offers" element={<ClientOffers />} /> */}
+          </Route>
+
+          {/* Common Routes for Both Roles */}
+        </Route>
+        
+        <Route path="/unauthorized" element={<Unauthorized />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
