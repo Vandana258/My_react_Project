@@ -25,14 +25,14 @@ export default function Sidebar({ toggleSidebar }) {
                                 <span className="">{("Dashboard")}</span>
                             </Link>
                         </li>
-                        {/* <li className="nav-item">
+                        <li className="nav-item">
                             <Link className={`nav-link ${location.pathname === "/items" && "active"}`} to="/items" 
                             onClick={removeToggleSidebarClass} >
                                 <i className="fa-solid fa-boxes-stacked"></i>
                                 <span className="">{("Items")}</span>
                             </Link>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <Link className={`nav-link ${location.pathname === "/categories" && "active"}`} to="/categories" 
                             onClick={removeToggleSidebarClass} >
                                 <i className="fa-solid fa-user-group"></i>
