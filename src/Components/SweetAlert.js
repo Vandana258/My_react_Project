@@ -5,7 +5,7 @@ const SweetAlert = {
         return Swal.fire(options);
     },
 
-    confirmArchive: async (title, text, confirmButtonText) => {
+    confirmStatus: async (title, text, confirmButtonText) => {
         const result = await Swal.fire({
             title,
             text,

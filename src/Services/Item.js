@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADDITEM, FINDALLITEM, FINDONEITEM, UPDATEITEM } from "./Endpoint";
+import { ADDITEM, FINDALLITEM, FINDONEITEM, UPDATEITEM, UPDATESTATUS } from "./Endpoint";
 
 export const createItem = (values) => {
    return axios.post(ADDITEM, values);
@@ -15,4 +15,8 @@ export const findoneItem = (params) => {
 
 export const updateItem = (values) => {
    return axios.put(UPDATEITEM, values);
+}
+
+export const updateStatus = ({ id, action }) => {
+   return axios.put(UPDATESTATUS,  { id, action });
 }

@@ -4,8 +4,10 @@ import DataTableComp from "../../Components/Datatable"
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Add from "./Add";
-import { findallItem } from "../../Services/Item";
+import { findallItem, updateStatus } from "../../Services/Item";
 import SweetAlert from "../../Components/SweetAlert";
+import Toast from "../../Components/Toast";
+import confirmStatus from "../../Components/SweetAlert"
 
 export default function Clients() {
     const navigate = useNavigate();
@@ -51,30 +53,31 @@ export default function Clients() {
         setShow(true);
     }
 
-    // const handleToggleArchive = (id, action) => {
-    //     const confirmMessage = action === 'archive'
-    //         ? t('Are you sure you want to archive?')
-    //         : t('Are you sure you want to unarchive?');
+    const handleStatusChange = (id, action) => {
+        const confirmMessage = action === 'active'
+            ? ('Are you sure you want to activate?')
+            : ('Are you sure you want to deactivate?');
 
-    //     const btnMsg = t(`Yes, ${action} it!`)
+        const btnMsg = (`Yes, ${action} it!`);
 
-    //     SweetAlert.confirmArchive(confirmMessage, '', btnMsg).then((isConfirmed) => {
-    //         if (isConfirmed) {
-    //             toggleArchiveClient({ id, action }).then((res) => {
-    //                 if (res.data.success) {
-    //                     Toast.success(t(`${action.charAt(0).toUpperCase() + action.slice(1)}d`));
-    //                     setActiveTab('active');
-    //                     getList();
-    //                 }
-    //             }).catch((error) => {
-    //                 console.log(error);
-    //                 SweetAlert.info(t(error.message), '');
-    //             });
-    //         } else {
-    //             SweetAlert.info(t('Cancelled!'), '', 'info');
-    //         }
-    //     });
-    // };
+        SweetAlert.confirmStatus(confirmMessage, '', btnMsg).then((isConfirmed) => {
+            if (isConfirmed) {
+                updateStatus({ id, action })
+                    .then((res) => {
+                        if (res.data.success) {
+                            Toast.success((`${action.charAt(0).toUpperCase() + action.slice(1)}d`));
+                            getList(); // refresh list
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        SweetAlert.info((error.message), '');
+                    });
+            } else {
+                SweetAlert.info(('Cancelled!'), '', 'info');
+            }
+        });
+    };
 
 
     const columns = [
@@ -120,7 +123,7 @@ export default function Clients() {
                     <>
                         <Tooltip title={("Edit")} placement="top" size='small' arrow>
                             <Link
-                            onClick={() => handleEdit(row.id)}
+                                onClick={() => handleEdit(row.id)}
                             >
                                 <div className="table-icon bg-success-subtle">
                                     <i className="fa-solid fa-pen-to-square text-success"></i>
@@ -129,7 +132,7 @@ export default function Clients() {
                         </Tooltip>
                         <Tooltip title={("Archive")} placement="top" size='small' arrow>
                             <Link className="ms-2"
-                            // onClick={() => handleToggleArchive(row.id, 'archive')}
+                                onClick={() => handleStatusChange(row.id, 'active')}
                             >
                                 <div className="table-icon bg-secondary-subtle">
                                     <i className="fa-solid fa-box-archive text-secondary"></i>

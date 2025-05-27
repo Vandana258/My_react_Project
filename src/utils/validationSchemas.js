@@ -12,6 +12,26 @@ export const loginValidationSchema = yup.object().shape({
     .required(('Password is required'))
 });
 
+export const addItem = yup.object().shape({
+  name: yup.string().required('Name is required'),
+  phone: yup.string()
+  .nullable()
+  .notRequired()
+  .test(
+    'len',
+    'Must be between 9 and 15 digits',
+    val => !val || (val.length >= 9 && val.length <= 15)
+  ),
+
+  // phone: yup.string()
+  //   .nullable()
+  //   .notRequired()
+  //   .min(9, "Must be at least 9 digits")
+  //   .max(15, "Must be at most 15 digits"),
+  image: yup.mixed().required('Image is required'),
+  role: yup.string().required('Select the role'),
+});
+
 export const addClientValidationSchema = (handleCheckIsEmailAlreadyExist) => yup.object().shape({
   name: yup.string('Enter your Name').required(('Name is required')),
   lastName: yup.string('Enter your Surname').required(('Surname is required')),

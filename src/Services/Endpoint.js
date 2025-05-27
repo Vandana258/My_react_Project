@@ -20,3 +20,4 @@ export const ADDITEM = ITEM + '/create';
 export const FINDALLITEM = ITEM + '/findall'; 
 export const FINDONEITEM = ITEM + '/findone'; 
 export const UPDATEITEM = ITEM + '/update'; 
+export const UPDATESTATUS = ITEM + '/status-change'; 

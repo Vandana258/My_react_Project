@@ -6,9 +6,10 @@ import SweetAlert from "../../Components/SweetAlert"
 import FormDropDown from '../../Components/FormDropdown'
 import { roles } from '../../utils/common';
 import { createItem, findoneItem, updateItem } from '../../Services/Item';
+import { addItem } from '../../utils/validationSchemas';
 export default function Add({ type, editId, setEditId, show, setShow, loading, setLoading, getList, ...rest }) {
 
-    const handleClose = () => { setShow(false);};
+    const handleClose = () => { setShow(false); };
 
     const dropDownChange = (e) => {
         const { name, value } = e.target;
@@ -20,7 +21,7 @@ export default function Add({ type, editId, setEditId, show, setShow, loading, s
     };
 
     const onSubmit = async (values, { resetForm }) => {
-        console.log("values",values)
+        console.log("values", values)
         const formData = new FormData();
         if (values.id !== undefined) {
             formData.append('id', values.id);
@@ -54,7 +55,7 @@ export default function Add({ type, editId, setEditId, show, setShow, loading, s
             });
     }
 
-    const title = `${type === 'Add' ? 'Add' : 'Edit'} Client`;
+    const title = `${type === 'Add' ? 'Add' : 'Edit'} Item`;
 
     const initialValues = {
         name: '',
@@ -70,7 +71,7 @@ export default function Add({ type, editId, setEditId, show, setShow, loading, s
 
     const { values, touched, errors, handleBlur, handleChange, setFieldValue, handleSubmit, setValues, resetForm } = useFormik({
         initialValues: initialValues,
-        validationSchema: '',
+        validationSchema: addItem,
         onSubmit
     })
 
@@ -118,9 +119,9 @@ export default function Add({ type, editId, setEditId, show, setShow, loading, s
                             value={values.role}
                             classnm="fs-13 mb-3 form-control length_count"
                         />
-                        {/* {touched.category && errors.category && (
-                        <div className="text-danger errorMSG">{errors.category}</div>
-                    )} */}
+                        {touched.role && errors.role && (
+                            <div className="text-danger errorMSG">{errors.role}</div>
+                        )}
                     </div>
                 </div>
                 <div className="col-md-6">
@@ -130,6 +131,10 @@ export default function Add({ type, editId, setEditId, show, setShow, loading, s
                             value={values.phone}
                             onChange={handleChange}
                             onBlur={handleBlur} />
+                        {touched.phone && errors.phone && (
+                            <div className="text-danger errorMSG">{errors.phone}</div>
+                        )}
+
                         {/* {touched.phone && errors.phone && (
                             <div className="text-danger errorMSG">{errors.phone}</div>
                         )} */}
@@ -141,9 +146,9 @@ export default function Add({ type, editId, setEditId, show, setShow, loading, s
                         <input type="file" className="form-control" id="image" name="image" onChange={(e) => handleFileChange(e.target.files[0])}
                         />
                         <span style={{ fontSize: "9px" }}>*(preferred image size 650×350)</span>
-                        {/* {touched.phone && errors.phone && (
-                            <div className="text-danger errorMSG">{errors.phone}</div>
-                        )}  */}
+                        {touched.image && errors.image && (
+                            <div className="text-danger errorMSG">{errors.image}</div>
+                        )}
                         <div className="col-md-4">
                             <img
                                 src={

@@ -55,4 +55,5 @@ module.exports = app => {
   app.get("/api/item/findall", [authJwt.verifyToken], controller.findAll);
   app.get("/api/item/findone", [authJwt.verifyToken], controller.findOne);
   app.put("/api/item/update", [authJwt.verifyToken], upload.single('image'),controller.update);
+  app.put("/api/item/status-change", [authJwt.verifyToken], upload.single('image'),controller.statusChange);
 }
