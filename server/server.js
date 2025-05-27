@@ -20,7 +20,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to My application." });
 });
 
-// app.use('/profileImage', express.static(path.join(__dirname, 'assets/profileimages')));
+app.use('/profileImage', express.static(path.join(__dirname, 'assets/profileimages')));
+app.use('/uploads', express.static(path.join(__dirname, 'assets/uploads')));
 // app.use('/jobImage', express.static(path.join(__dirname, 'assets/jobImages')));
 
 // set port, listen for requests
@@ -30,6 +31,9 @@ app.listen(PORT, () => {
 });
 
 require('./app/routes/auth.routes')(app);
+require('./app/routes/user.routes')(app);
+require('./app/routes/item.routes')(app);
+require('./app/routes/dashboard.routes')(app);
 
 
 const db = require("./app/models");

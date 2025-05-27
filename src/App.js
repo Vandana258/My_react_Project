@@ -7,6 +7,9 @@ import RoleBasedRoutes from './Pages/Routes/RoleBasedRoutes'
 import Dashboard from './Pages/Dashboard/Dashboard';
 import Unauthorized from './Pages/PublicPages/Unauthorized';
 import Login from './Pages/Auth/Login'
+import Profile from './Pages/AccountSettings/Profile';
+import ChangePassword from './Pages/AccountSettings/ChangePassword';
+import Item from './Pages/Items/item';
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
           <Route element={<RoleBasedRoutes allowedRoles={["SuperAdmin", "Admin"]} />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/change-password" element={<ChangePassword />} />
+              <Route path="/items" element={<Item />} />
           </Route>
 
           {/* Client Only Routes */}

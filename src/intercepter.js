@@ -9,7 +9,7 @@ axios.interceptors.request.use(
         if (user) {
             const token = user.token;
             config.headers.accessToken = token;
-            if((config.url.includes('/api/users/updateProfile')) || (config.url.includes('/api/suppliers/create')) || (config.url.includes('/api/suppliers/update')) || (config.url.includes('/api/architects/create')) || (config.url.includes('/api/architects/update')) || (config.url.includes('/api/offer/uploadContractDocument')) ){ 
+            if((config.url.includes('api/users/updateProfile')) || (config.url.includes('api/item/create')) || (config.url.includes('api/item/update')) || (config.url.includes('api/architects/create')) || (config.url.includes('api/architects/update')) || (config.url.includes('api/offer/uploadContractDocument')) ){ 
                 config.headers= {"Content-Type": "multipart/form-data",'x-access-token': token};
             }
             else{

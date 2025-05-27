@@ -3,7 +3,6 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
-import { useTranslation } from 'react-i18next';
 
 const customStyles = {
     rows: {
@@ -34,17 +33,16 @@ const customStyles = {
 };
 
 export const DataTableComp = ({ columns, data, ...rest }) => {
-    const { t } = useTranslation();
     const [search, setSearch] = useState('');
     const [filteredData, setFilteredData] = useState(data);
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const paginationComponentOptions = {
-        rowsPerPageText: t('Rows per page'),
-        rangeSeparatorText: t('of'),
+        rowsPerPageText: ('Rows per page'),
+        rangeSeparatorText: ('of'),
         selectAllRowsItem: true,
-        selectAllRowsItemText: t('All'),
+        selectAllRowsItemText: ('All'),
     };
 
     useEffect(() => {
@@ -109,7 +107,7 @@ export const DataTableComp = ({ columns, data, ...rest }) => {
 
     const updatedColumns = [
         {
-            name: t('S No.'),
+            name: ('S No.'),
             selector: (_, index) => index + 1 + (currentPage - 1) * rowsPerPage,
             sortable: false,
             width: '50px',
@@ -117,7 +115,7 @@ export const DataTableComp = ({ columns, data, ...rest }) => {
         ...columns,
     ];
 
-    const noDataComponent = <div>{t("There are no records to display")}</div>;
+    const noDataComponent = <div>{("There are no records to display")}</div>;
     return (
         <DataTable
             noDataComponent={noDataComponent}

@@ -39,38 +39,3 @@ export default function FormDropDown(props) {
     />
   );
 }
-
-const Items = [
-  { value: '1', label: 'Admin' },
-  { value: '2', label: 'SuperAdmin' },
-  { value: '3', label: 'User' }
-];
-
-
-const { values, touched, errors, handleBlur, handleChange, setFieldValue, handleSubmit } = useFormik({
-  initialValues: {
-    name: "",
-    // category: []  for multiselect
-    //  category: Items[0].value  for multiselect
-  },
-  validationSchema: '', // Add schema if needed
-  onSubmit
-});
-
-// const dropDownChange = (e) => {
-//   const { name, value } = e.target;
-//   setFieldValue(name, value);
-// };
-
-// // In your JSX
-// <div className="mb-2">
-//   <label className="form-label">Category</label>
-//   <FormDropDown
-//     onChange={dropDownChange}
-//     name="category"
-//     options={Items}
-//     multiselect={true}
-//     value={values.category}
-//     classnm="fs-13 mb-3 form-control length_count"
-//   />
-// </div>
