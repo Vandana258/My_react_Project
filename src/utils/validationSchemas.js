@@ -14,20 +14,10 @@ export const loginValidationSchema = yup.object().shape({
 
 export const addItem = yup.object().shape({
   name: yup.string().required('Name is required'),
-  phone: yup.string()
-  .nullable()
-  .notRequired()
-  .test(
-    'len',
-    'Must be between 9 and 15 digits',
-    val => !val || (val.length >= 9 && val.length <= 15)
+  phone: yup.string().required('Phone number is required').matches(
+    /^(?:\+?\d{0,4})?\s?(?:\(?\d{1,3}?\)?[\s.-]?\d{3}[\s.-]?\d{4})$/,
+    'Invalid phone number'
   ),
-
-  // phone: yup.string()
-  //   .nullable()
-  //   .notRequired()
-  //   .min(9, "Must be at least 9 digits")
-  //   .max(15, "Must be at most 15 digits"),
   image: yup.mixed().required('Image is required'),
   role: yup.string().required('Select the role'),
 });

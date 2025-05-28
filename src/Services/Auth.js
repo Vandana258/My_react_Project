@@ -1,8 +1,12 @@
 import axios from "axios";
-import { LOGIN, SECRET, SETUP2FA } from "./Endpoint";
+import { LOGIN, SECRET, SETUP2FA, SIGNUP } from "./Endpoint";
 
 export const login = (values) => {
    return axios.post(LOGIN, values);
+}
+
+export const signup = (values) => {
+   return axios.post(SIGNUP, values);
 }
 
 export const secret = (data) =>{

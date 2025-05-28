@@ -18,19 +18,10 @@ export default function Login() {
         password: ''
     }
 
-    const formik = useFormik({
-        initialValues: initialValues,
-        validationSchema: '',
-        onSubmit: values => {
-            handleSubmit(values);
-        }
-    });
-
-    const handleSubmit = async (values) => {
+    const onSubmit = async (values) => {
         const email = values.email
         try {
             const res = await login(values);
-
             if (res.data.success) {
                 if (res.data.requires2FA) {
                     setRequires2FA(true);
@@ -45,7 +36,7 @@ export default function Login() {
                     if (twoFARes.data.success) {
                         setRequires2FA(true);
                         setTwoFAInfo({
-                            userId: twoFARes.data.userId,
+                            userId:  res.data.userId,
                             qrCode: twoFARes.data.qrCode,
                             secret: twoFARes.data.secret
                         });
@@ -58,7 +49,7 @@ export default function Login() {
                 if (res.data.data.role === 'SuperAdmin' || res.data.data.role === 'Admin') {
                     navigate('/dashboard');
                 } else {
-                    // navigate('/offer_details');
+                    navigate('/items');
                 }
             } else {
                 SweetAlert.fire(res.data.message, '', 'info');
@@ -67,6 +58,12 @@ export default function Login() {
             SweetAlert.fire(error.message, '', 'info');
         }
     };
+
+    const { values, touched, errors, handleBlur, handleChange, setFieldValue, handleSubmit, setValues, resetForm } = useFormik({
+        initialValues: initialValues,
+        validationSchema: '',
+        onSubmit
+    })
 
     const handleVerify2FA = async () => {
         try {
@@ -80,7 +77,11 @@ export default function Login() {
             if (res.data.success) {
                 localStorage.setItem('user', JSON.stringify(res.data.data));
                 SweetAlert.fire(res.data.message, '', 'success');
-                navigate('/dashboard');
+                if (res.data.data.role === 'SuperAdmin' || res.data.data.role === 'Admin') {
+                    navigate('/dashboard');
+                } else {
+                    navigate('/items');
+                }
             } else {
                 SweetAlert.fire(res.data.message, '', 'error');
             }
@@ -100,7 +101,7 @@ export default function Login() {
                             </Link>
                             <h4>{('Login')}</h4>
                             {!requires2FA ? (
-                                <form className="mb-3" onSubmit={formik.handleSubmit}>
+                                <form className="mb-3" onSubmit={handleSubmit}>
                                     <div className="mb-3">
                                         <label htmlFor="email" className="form-label">{('Email Address')}:</label>
                                         <input
@@ -108,30 +109,34 @@ export default function Login() {
                                             className="form-control"
                                             id="email"
                                             placeholder={('name@example.com')}
-                                            value={formik.values.email}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
+                                            value={values.email}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
                                         />
                                     </div>
                                     <div className='mb-3'>
                                         <label htmlFor="password" className="form-label">{('Password')}:</label>
                                         <div className="input-group input-group-merge">
                                             <input
-                                                type={showPassword ? "text" : "password"} 
+                                                type={showPassword ? "text" : "password"}
                                                 className="form-control"
                                                 id="password"
                                                 placeholder={('Password')}
-                                                value={formik.values.password}
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
+                                                value={values.password}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
                                             />
                                             <span className="cursor-pointer eye-icon input-group-text" onClick={handleShowPassword}>
                                                 <i className={showPassword ? "fa-solid fa-eye" : "fa-solid fa-eye-slash"}></i>
-                                            </span>                                        
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="d-flex justify-content-between">
                                         <div className="form-check mb-3">
+                                            <p className="text-center">
+                                                Don't have an account? <Link to="/sign-up">Sign Up</Link>
+                                            </p>
+
                                             {/* <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                                             <label className="form-check-label" htmlFor="flexCheckDefault">
                                                 {t('Remember me')}
@@ -143,8 +148,8 @@ export default function Login() {
                                         <button type="Submit" className="login-btn">{('Login')}</button>
                                     </div>
                                 </form>
-                            ):(
-                                <TwoFactorAuth 
+                            ) : (
+                                <TwoFactorAuth
                                     twoFAToken={twoFAToken}
                                     setTwoFAToken={setTwoFAToken}
                                     handleVerify2FA={handleVerify2FA}
@@ -152,7 +157,7 @@ export default function Login() {
                                 />
                             )
                             }
-                            
+
                         </div>
                     </div>
                 </div>

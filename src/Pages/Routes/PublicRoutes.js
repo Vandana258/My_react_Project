@@ -15,7 +15,7 @@ const PublicRoutes=(props) =>{
   const authUser = JSON.parse(user);
     const auth = useAuth()
     return auth 
-    ? <Navigate to={authUser.role === 'SuperAdmin' ? "/" : "/" } /> : <Outlet />
+    ? <Navigate to={authUser.role === 'SuperAdmin' ? "/dashboard" : "/items" } /> : <Outlet />
 }
 
 export default PublicRoutes;

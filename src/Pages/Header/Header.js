@@ -55,14 +55,14 @@ export default function Header({ title, toggleSidebar }) {
               <li>
                 <div className="dropdown-divider"></div>
               </li>
-              { (user?.role === "Client") &&
-                (<li>
+              {/* { (user?.role === "Client") &&
+                (<li>   
                   <Link className="dropdown-item" to="/offer_details">
                     <i className="fa-solid fa-certificate me-2"></i>
                     <span className="">{('Your Offers')}</span>
                   </Link>
                 </li>)
-              }
+              } */}
               <li>
                 <Link className="dropdown-item" to="/profile">
                   <i className="fa-solid fa-gear me-2"></i>

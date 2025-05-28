@@ -9,7 +9,7 @@ import SweetAlert from "../../Components/SweetAlert";
 import Toast from "../../Components/Toast";
 import confirmStatus from "../../Components/SweetAlert"
 
-export default function Clients() {
+export default function Item() {
     const navigate = useNavigate();
     const authUser = localStorage.getItem('user');
     const user = JSON.parse(authUser);
@@ -17,7 +17,7 @@ export default function Clients() {
     const [editId, setEditId] = useState(0);
     const [popupType, setPopupType] = useState('Add');
     const [loading, setLoading] = useState(false);
-    const [clients, setClients] = useState([]);
+    const [data, setData] = useState([]);
     const [imgBaseUrl, setImgBaseUrl] = useState("");
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function Clients() {
             const response = await findallItem();
             setLoading(false);
             if (response.data.success) {
-                setClients(response.data.data);
+                setData(response.data.data);
                 setImgBaseUrl(response.data.imgBaseUrl);
             } else {
                 SweetAlert.error('Error', (response.data.message) || ('An error occurred while fetching item list!'));
@@ -78,6 +78,35 @@ export default function Clients() {
             }
         });
     };
+
+    const exportToCSV = (data, filename = "export.csv") => {
+        if (!data || data.length === 0) return;
+
+        // Define headers
+        const headers = ["Name", "Phone", "Image URL"];
+
+        // Generate rows
+        const rows = data.map(item => [
+            `"${item.name}"`,
+            `"${item.phone}"`,
+            `"${item.image}"`
+        ]);
+
+        // Combine headers and rows
+        const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+
+        // Create blob and download
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
 
 
     const columns = [
@@ -151,7 +180,7 @@ export default function Clients() {
             <Layout title={("Items")}>
                 <div className="card border-0 mb-3 cardRadius_shadow">
                     <div className="card-body">
-                        <div className="d-flex align-items-center justify-content-between flex-wrap">
+                        <div className="d-flex align-items-center justify-content-end flex-wrap">
                             <ul>
                             </ul>
                             <button className="add-btn w-auto small-screen-btn"
@@ -162,12 +191,17 @@ export default function Clients() {
                                 </span>
                                 {("Add Item")}
                             </button>
+                            <button className="add-btn w-auto small-screen-btn"
+                                onClick={() => exportToCSV(data, "users.csv")}
+                            >
+                                {("Export as CSV")}
+                            </button>
                         </div>
                         <hr />
                         <div className="row align-items-center">
                             <div className="col-md-12">
                                 <div className="table-responsive">
-                                    <DataTableComp columns={columns} data={clients} />
+                                    <DataTableComp columns={columns} data={data} />
                                 </div>
                             </div>
                         </div>

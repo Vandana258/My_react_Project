@@ -5,6 +5,45 @@ const bcrypt = require("bcryptjs");
 const speakeasy = require('speakeasy');
 const QRCode = require('qrcode');
 
+exports.signup = async (req, res) => {
+    const { name, email, password, role } = req.body;
+
+    if (!name || !email || !password) {
+        return res.send({ success: false, message: "All fields are required" });
+    }
+
+    try {
+        // Check if email already exists
+        const existingUser = await db.users.findOne({ where: { email } });
+        if (existingUser) {
+            return res.send({ success: false, message: "Email already in use" });
+        }
+
+        // Encrypt password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await db.users.create({
+            name,
+            email,
+            password: hashedPassword,
+            role: role || 'Client',  // default role
+            status: '1'
+        });
+
+        const token = jwt.sign({ id: newUser.id }, config.secret, { expiresIn: 86400 });
+
+        res.send({
+            success: true,
+            message: "User registered successfully",
+            data: { ...newUser.dataValues, token }
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ success: false, message: "Server error" });
+    }
+};
+
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -196,3 +235,4 @@ exports.verify2FA = async (req, res) => {
 
     res.send({ success: true, message: "2FA verified!", data: user });
 };
+

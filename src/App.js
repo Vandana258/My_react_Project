@@ -10,6 +10,7 @@ import Login from './Pages/Auth/Login'
 import Profile from './Pages/AccountSettings/Profile';
 import ChangePassword from './Pages/AccountSettings/ChangePassword';
 import Item from './Pages/Items/item';
+import SignUp from './Pages/Auth/Signup';
 
 function App() {
   return (
@@ -17,11 +18,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
-        {/* <Route path="/" element={<PublicRoutes />}> */}
+        <Route path="/" element={<PublicRoutes />}>
           <Route element={<Login />} path="/" />
           <Route element={<Login />} path="/login" />
+          <Route element={<SignUp />} path="/sign-up" />
           {/* <Route element={<ForgotPassword />} path="/forgot_password" /> */}
-        {/* </Route> */}
+        </Route>
 
         {/* Protected Routes for Authenticated Users */}
         <Route path="/" element={<ProtectedRoutes />}>
@@ -29,13 +31,13 @@ function App() {
           <Route element={<RoleBasedRoutes allowedRoles={["SuperAdmin", "Admin"]} />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/change-password" element={<ChangePassword />} />
-              <Route path="/items" element={<Item />} />
           </Route>
 
           {/* Client Only Routes */}
           <Route element={<RoleBasedRoutes allowedRoles={["SuperAdmin", "Admin", "Client"]} />}>
+            <Route path="/items" element={<Item />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/change-password" element={<ChangePassword />} />
               {/* <Route path="/client_quote_requests" element={<ClientQuoteRequests />} />
               <Route path="/client_offers" element={<ClientOffers />} /> */}
           </Route>
@@ -46,6 +48,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </BrowserRouter>
+
   );
 }
 
