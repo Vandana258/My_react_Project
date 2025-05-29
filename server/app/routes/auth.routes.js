@@ -12,4 +12,5 @@ module.exports = app => {
     app.post('/api/auth/sign-up', controller.signup);
     app.post('/api/auth/setup2FA', controller.setup2FA);
     app.post('/api/auth/verify2FA',controller.verify2FA);
+    app.post('/api/auth/forgotpassword',controller.forgotPassword);
 }

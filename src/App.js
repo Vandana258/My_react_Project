@@ -11,6 +11,7 @@ import Profile from './Pages/AccountSettings/Profile';
 import ChangePassword from './Pages/AccountSettings/ChangePassword';
 import Item from './Pages/Items/item';
 import SignUp from './Pages/Auth/Signup';
+import ForgotPassword from './Pages/Auth/ForgotPassword';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
           <Route element={<Login />} path="/" />
           <Route element={<Login />} path="/login" />
           <Route element={<SignUp />} path="/sign-up" />
-          {/* <Route element={<ForgotPassword />} path="/forgot_password" /> */}
+          <Route element={<ForgotPassword />} path="/forgot_password" />
         </Route>
 
         {/* Protected Routes for Authenticated Users */}

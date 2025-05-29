@@ -4,6 +4,9 @@ var jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const speakeasy = require('speakeasy');
 const QRCode = require('qrcode');
+const utility  = require('../utilities/utility');
+const SendEmail = require("../config/email.config");
+const BASE_URL = process.env.BASE_URL;
 
 exports.signup = async (req, res) => {
     const { name, email, password, role } = req.body;
@@ -108,48 +111,32 @@ exports.login = async (req, res) => {
     }
 };
 
-
-// exports.forgotPassword = async (req, res) => {
-//     let email = req.body.email;
-//     try {
-//         const user = await db.users.findOne({ where: { 'email': email } });
-//         if (user) {
-//             const password = utility.GenerateRandomPassword(8);
-//             let encryptedPassword = await bcrypt.hash(password, 10);
-//             var data = await db.users.update({ password: encryptedPassword }, { where: { 'email': email } });
-//             if (data) {
-//                 let userLang = DEFAULT_LANG || 'it';
-//                 i18n.setLocale(req, userLang);
-//                 let context = {}
-//                 context.link = BASE_URL + '/login'
-//                 context.name = await utility.showStringToFirstCharacterInUpperCase(user.name)
-//                 context.user_email = req.body.email
-//                 context.user_pass = password
-//                 context.t = {
-//                     subject: req.__("forgot_password.subject"),
-//                     greeting: req.__("forgot_password.greeting"),
-//                     message: req.__("forgot_password.message"),
-//                     info: req.__("forgot_password.info"),
-//                     security: req.__("forgot_password.security"),
-//                     login: req.__("forgot_password.login"),
-//                     change_password: req.__("forgot_password.change_password"),
-//                     thank_you: req.__("forgot_password.thank_you"),
-//                     best_regards: req.__("common.best_regards"),
-//                     team: req.__("common.team"),
-//                 };
-
-//                 await SendEmail.sendMail(req.body.email, context.t.subject, context, "forgot_password");
-//                 response = { success: true, message: "An email with the new password has been sent to the registered email id." }
-//             }
-//         }
-//         else {
-//             response = { success: true, message: "User with this email Not Found." }
-//         }
-//         return res.send(response);
-//     } catch (e) {
-//         res.send({ success: false, message: 'Try Again!! ' + e });
-//     }
-// }
+exports.forgotPassword = async (req, res) => {
+    let email = req.body.email;
+    try {
+        const user = await db.users.findOne({ where: { 'email': email } });
+        if (user) {
+            const password = utility.GenerateRandomPassword(8);
+            let encryptedPassword = await bcrypt.hash(password, 10);
+            var data = await db.users.update({ password: encryptedPassword }, { where: { 'email': email } });
+            if (data) {
+                 let context = {}
+                context.link = BASE_URL + 'login'
+                context.name = await utility.showStringToFirstCharacterInUpperCase(user.name)
+                context.user_email = req.body.email
+                context.user_pass = password
+                await SendEmail.sendMail(req.body.email, "vandana project - Password Reset Notification", context, "forgot_password");
+                response = { success: true, message: "An email with the new password has been sent to the registered email id." }
+            }
+        }
+        else {
+            response = { success: true, message: "User with this email Not Found." }
+        }
+        return res.send(response);
+    } catch (e) {
+        res.send({ success: false, message: 'Try Again!! ' + e });
+    }
+}
 
 // exports.CheckIsEmailAlreadyExist = async (req, res) => {
 //   const { email , id, userType} = req.body;
@@ -233,6 +220,6 @@ exports.verify2FA = async (req, res) => {
 
     user.dataValues.token = jwtToken;
 
-    res.send({ success: true, message: "2FA verified!", data: user });
+    res.send({ success: true, message: "Verfication Complete!", data: user });
 };
 

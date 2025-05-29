@@ -33,7 +33,6 @@ exports.updateProfile = async (req, res) => {
         if (req.file) {
             try {
                 const fileName = `${req.userId}${path.extname(req.file.originalname)}`;
-                console.log("fileName",fileName)
                 updateData.image = fileName;
             } catch (error) {
                 return res.status(500).send({
@@ -42,8 +41,6 @@ exports.updateProfile = async (req, res) => {
                 });
             }
         }
-
-        console.log("updateData",updateData);
 
         const [updateCount] = await db.users.update(updateData, { where: { id } });
         if (!updateCount) {
